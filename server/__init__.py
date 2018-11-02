@@ -80,7 +80,12 @@ def callback():
 def results():
 
     # Parse optional url query string arguments.
+    # repoName determines the name of the repo that is created in GitHub.
     repo_name = request.args.get('repoName', app.config.get('DEFAULT_REPO_NAME'))
+    # addToExisting determines whether we try to add the files of this app to
+    # an existing repo, if one already exists with the above name. Note that we
+    # will NOT overwrite files in that repo that exist there already and that
+    # exist in this app too.
     add_to_existing = request.args.get('addToExisting', False)
 
     # Create a Github object using the oauth token saved to our session object.
@@ -139,6 +144,9 @@ def results():
             # Ideally, Github would allow us to add our files in batches rather than one at a time
             # so that we can reduce the number of API calls required. However, based on this
             # discussion, it does not appear to be possible. https://github.com/isaacs/github/issues/199
+
+            # Note that we will NOT overwrite an existing files.
+            # This only creates NEW files.
 
             repo.create_file(file_path_formatted, commit_message, file_content)
             files_added_successfully.append(file_path_formatted)
