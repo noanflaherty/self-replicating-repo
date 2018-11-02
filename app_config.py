@@ -13,6 +13,7 @@ else:
 
 
 APP_SECRET_KEY = parser['APP']['secret_key']
+DEFAULT_REPO_NAME = parser['APP']['default_repo_name']
 
 GITHUB_CLIENT_ID = parser['GITHUB']['client_id']
 GITHUB_CLIENT_SECRET = parser['GITHUB']['client_secret']
