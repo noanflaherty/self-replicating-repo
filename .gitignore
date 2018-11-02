@@ -1,5 +1,6 @@
 env/
 logs/
 flask_session/
+node_modules/
 
 *.pyc
