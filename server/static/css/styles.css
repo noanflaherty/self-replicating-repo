@@ -24,13 +24,6 @@ h2 {
     font-size: 1.2em;
 }
 
-table, th, td {
-    text-align: left;
-    font-style: normal;
-    font-weight: normal;
-    padding: 0px 10px 0px 5px;"
-}
-
 .page {
     margin: 2em auto;
     width: 35em;

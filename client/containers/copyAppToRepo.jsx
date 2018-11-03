@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import GitHubLogin from 'react-github-login';
 
 // Import components
-import { Button } from '../components/genericButton.jsx';
+import CopyAppToRepoForm from './copyAppToRepoForm.jsx';
 
 // Import action creators
 import { copyAppToNewRepo } from '../actions/index';
@@ -17,7 +17,8 @@ import {
   successfullyAddedFilesSelector,
   unsuccessfullyAddedFilesSelector,
   repoNameInResultsSelector,
-  copyAppToRepoResultsErrorSelector,
+  copyAppToRepoResultsErrorDataSelector,
+  attemptedRepoNameSelector,
 } from '../selectors/index';
 
 class CopyAppToRepo extends Component {
@@ -26,11 +27,13 @@ class CopyAppToRepo extends Component {
 
     const allFilesAddedSuccessfully = (this.props.successfullyAddedFiles.length > 0 && this.props.unsuccessfullyAddedFiles.length == 0);
     const allFilesAddedFailed = (this.props.successfullyAddedFiles.length == 0 && this.props.unsuccessfullyAddedFiles.length > 0);
+    const newRepoName = this.props.repoNameInResults;
 
     if (allFilesAddedSuccessfully) {
       return (
         <div>
           <h3>Repo Created and App Files Added Successfully</h3>
+          <h4>Repo Created: {newRepoName}</h4>
           <h4>Files Added:</h4>
           <ul>
             {_.map(this.props.successfullyAddedFiles, file => <li key={file}>{file}</li>)}
@@ -41,6 +44,7 @@ class CopyAppToRepo extends Component {
       return (
         <div>
           <h3>Repo Created But Failed To Add Files</h3>
+          <h4>Repo Created: {newRepoName}</h4>
           <h4>Files Failed:</h4>
           <ul>
             {_.map(this.props.unsuccessfullyAddedFiles, file => <li key={file}>{file}</li>)}
@@ -51,6 +55,7 @@ class CopyAppToRepo extends Component {
       return (
         <div>
           <h3>Repo Created and Some App Files Added Successfully</h3>
+          <h4>Repo Created: {newRepoName}</h4>
           <h4>Files Added:</h4>
           <ul>
             {_.map(this.props.successfullyAddedFiles, file => <li key={file}>{file}</li>)}
@@ -73,30 +78,24 @@ class CopyAppToRepo extends Component {
     } else {
       if (this.props.resultsError != null) {
         const errorMessage = this.props.resultsError.message;
-        const firstError = this.props.resultsError.errors[0];
-        const errorDetail = `${firstError.resource} ${firstError.message}.`
+        const attemptedRepoName = this.props.attemptedRepoName;
         return (
           <div>
-            <h2>{errorMessage}</h2>
-            <p>{errorDetail}</p>
+            <h2>Error Creating Repo</h2>
+            <p>{`Failed to create a new repository with the name "${attemptedRepoName}". Please try a different repo name.`}</p>
+            <CopyAppToRepoForm/>
           </div>
         );
       } else if (this.props.resultsAreLoaded) {
         return (
           <div>
             <div>{this.renderResults()}</div>
-            <Button
-              handleClick={() => this.props.copyAppToNewRepo('test118')}
-              buttonText='Create New Repo and Copy App'
-              />
+            <CopyAppToRepoForm/>
           </div>
         );
       } else {
         return (
-          <Button
-            handleClick={() => this.props.copyAppToNewRepo('test118')}
-            buttonText='Create New Repo and Copy App'
-            />
+          <CopyAppToRepoForm/>
         );
       }
     }
@@ -110,7 +109,8 @@ function mapStateToProps(state) {
     successfullyAddedFiles: successfullyAddedFilesSelector(state),
     unsuccessfullyAddedFiles: unsuccessfullyAddedFilesSelector(state),
     repoNameInResults: repoNameInResultsSelector(state),
-    resultsError: copyAppToRepoResultsErrorSelector(state),
+    resultsError: copyAppToRepoResultsErrorDataSelector(state),
+    attemptedRepoName: attemptedRepoNameSelector(state),
   };
 }
 

@@ -18,9 +18,6 @@ class Fetch_Github_Auth_Token(Resource):
 
     def post(self):
 
-        print self.code
-        print app.config.get('GITHUB_REDIRECT_URI')
-
         token_url = 'https://github.com/login/oauth/access_token'
 
         data = {
@@ -61,18 +58,24 @@ class Copy_App_To_New_Repo(Resource):
 
         # Try to create the repo. Creation will fail if a repo has already been created with that name.
         try:
+            print('Trying to create new repo with name: {}'.format(repo_name))
             repo = user.create_repo(repo_name)
         # If we fail to create a repo, we check to see if it was because there was already one with that name
-        except GithubException as e:
-            # If there is one with that name, then we check to see if we want to add our files to the existing repo
-            if add_to_existing:
-                try:
-                    # If we do, we get the existing repo's Repository object.
-                    repo = user.get_repo(repo_name)
-                except GithubException as e:
-                    return handleGithubError(e)
-            else:
-                return handleGithubError(e)
+        except GithubException as repo_creation_error:
+            data = {
+                'repoName': repo_name,
+            }
+
+            try:
+                print ('Trying to fetch existing repo with name: {}'.format(repo_name))
+                existing_repo = user.get_repo(repo_name)
+                print ('Found existing repo: {}'.format(existing_repo))
+                existing_repo_name = existing_repo.name
+
+                return handleGithubError(repo_creation_error, data=data)
+
+            except GithubException as existing_repo_retrieval_error:
+                return handleGithubError(existing_repo_retrieval_error, data=data)
 
         # If we successfully created the repo, then we can prep all files in this app to add to the repo.
         files = getAllFilesWPathsInDirectory('.', dirsToAvoid=DEFAULT_DIRS_TO_AVOID, extensionsToAvoid=DEFAULT_EXTENSIONS_TO_AVOID)
@@ -83,14 +86,14 @@ class Copy_App_To_New_Repo(Resource):
 
             # Try to read the file's content.
             try:
-                with open(file_path, "rb") as file:
+                with open(file_path, 'rb') as file:
                     file_content = file.read()
             except IOError as e:
                 files_failed.append(file_path_formatted)
                 continue
 
             file_path_formatted = file_path[2:]
-            commit_message = "Committing file {file_num} of {num_files}: {file_path}".format(file_num=i+1, num_files=len(files), file_path=file_path_formatted)
+            commit_message = 'Committing file {file_num} of {num_files}: {file_path}'.format(file_num=i+1, num_files=len(files), file_path=file_path_formatted)
 
             print(commit_message)
 
@@ -106,9 +109,9 @@ class Copy_App_To_New_Repo(Resource):
                 files_failed.append(file_path_formatted)
 
         results = {
-            "repoName": repo_name,
-            "successfullyAdded":  files_added_successfully,
-            "failed": files_failed,
+            'repoName': repo_name,
+            'successfullyAdded':  files_added_successfully,
+            'failed': files_failed,
         }
 
         return results
@@ -129,8 +132,14 @@ class Copy_App_To_New_Repo(Resource):
 
 
 
-def handleGithubError(error):
+def handleGithubError(error, data={}):
     status = error.args[0]
-    data = error.args[1]
-    print(data, status)
-    return data, status
+    errorData = error.args[1]
+
+    resp = {
+        'data': data,
+        'error': errorData,
+    }
+
+    print(resp, status)
+    return resp, status

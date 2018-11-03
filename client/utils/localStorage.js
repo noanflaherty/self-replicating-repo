@@ -1,7 +1,7 @@
 export const loadTokenFromLocalStorage = () => {
   const token = localStorage.getItem('github_token');
   try {
-    if (token === null) {
+    if (token === null || token == 'null') {
       return undefined;
     }
 
