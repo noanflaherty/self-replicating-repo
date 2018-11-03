@@ -7,8 +7,8 @@ import GitHubLogin from 'react-github-login';
 // Import action creators
 import { loginStarted, fetchAuthToken, loginFailure } from '../actions/index';
 
-
 class LoginButton extends Component {
+
   render() {
     const AUTH_URI = 'https://github.com/login/oauth/authorize';
     const CLIENT_ID = 'a2095cdeb6ef908ffafb';
@@ -17,7 +17,6 @@ class LoginButton extends Component {
 
     return (
       <div>
-        <p>Hello</p>
         <GitHubLogin
           clientId={CLIENT_ID}
           onRequest={() => this.props.loginStarted()}
@@ -32,15 +31,8 @@ class LoginButton extends Component {
   }
 }
 
-
-function mapStateToProps(state) {
-  return {
-    github: state.github,
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ loginStarted, fetchAuthToken, loginFailure }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginButton);
+export default connect(null, mapDispatchToProps)(LoginButton);

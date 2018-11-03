@@ -37,7 +37,7 @@ logger.addHandler(stdoutLogHandler)
 
 
 # Register APIs
-from server.api.github import github_api
+from server.api.githubApi import github_api
 app.register_blueprint(github_api.blueprint, url_prefix='/api/github')
 
 # Register views
