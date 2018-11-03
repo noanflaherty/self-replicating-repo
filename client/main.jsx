@@ -9,12 +9,13 @@ import throttle from 'lodash/throttle';
 
 // Import middleware
 import thunk from 'redux-thunk';
+import ReduxPromise from 'redux-promise';
 
 // Import root reducer
 import rootReducer from './reducers/rootReducer';
 
 // Import containers/components
-import LoginButton from './containers/loginButton.jsx';
+import Home from './containers/home.jsx';
 
 // Import utilities
 import { loadTokenFromLocalStorage, saveTokenToLocalStorage } from './utils/localStorage';
@@ -28,22 +29,23 @@ const store = createStore(
   rootReducer,
   composeSetup(),
   applyMiddleware(
-    thunk
+    ReduxPromise,
+    thunk,
   )
 );
 
 store.subscribe(throttle(() => {
-  saveTokenToLocalStorage(_.get(store.getState().github, 'token', null));
+  const authToken = _.get(store.getState().github, 'token', null);
+  saveTokenToLocalStorage(authToken);
 }, 1000));
 
 const App = () => {
 
   return (
     <div>
-      <h1>Self-Replicating Repo</h1>
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" component={ LoginButton } />
+          <Route exact path="/" component={ Home } />
         </Switch>
       </BrowserRouter>
     </div>
