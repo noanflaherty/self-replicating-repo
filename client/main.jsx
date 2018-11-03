@@ -15,7 +15,7 @@ import ReduxPromise from 'redux-promise';
 import rootReducer from './reducers/rootReducer';
 
 // Import containers/components
-import Home from './containers/home.jsx';
+import App from './containers/app.jsx';
 
 // Import utilities
 import { loadTokenFromLocalStorage, saveTokenToLocalStorage } from './utils/localStorage';
@@ -39,18 +39,6 @@ store.subscribe(throttle(() => {
   saveTokenToLocalStorage(authToken);
 }, 1000));
 
-const App = () => {
-
-  return (
-    <div>
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={ Home } />
-        </Switch>
-      </BrowserRouter>
-    </div>
-  );
-};
 
 ReactDOM.render(
   <Provider store={store}>

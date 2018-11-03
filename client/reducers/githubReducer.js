@@ -13,7 +13,7 @@ import {
 export const initialState = {
   token: null,
   loggingIn: false,
-  error: null,
+  loginError: null,
   user: {},
   loadingResults: false,
   results: {},
@@ -37,12 +37,12 @@ export const github = (state = initialState, action) => {
         ...state,
         token: action.payload.access_token,
         loggingIn: false,
-        error: null,
+        loginError: null,
       };
     case LOGIN_FAILURE:
       return {
         ...initialState,
-        error: action.payload.response,
+        loginError: action.payload.response,
       };
     case LOGOUT:
       return initialState;
@@ -68,7 +68,7 @@ export const github = (state = initialState, action) => {
         ...state,
         loadingResults: false,
         results: {},
-        resultsError: _.get(action.payload.response, 'data', null),
+        resultsError: action.payload.response,
       };
     default:
       return state;

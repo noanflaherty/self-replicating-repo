@@ -12,7 +12,7 @@ class LoginButton extends Component {
   render() {
     const AUTH_URI = 'https://github.com/login/oauth/authorize';
     const CLIENT_ID = 'a2095cdeb6ef908ffafb';
-    const REDIRECT_URI = 'http://localhost:8000/';
+    const REDIRECT_URI = 'http://localhost:8000/login';
     const SCOPE = 'user public_repo';
 
     return (
@@ -25,6 +25,7 @@ class LoginButton extends Component {
           redirectUri={REDIRECT_URI}
           scope={SCOPE}
           buttonText='Log In'
+          className="btn btn-primary"
           />
       </div>
     );

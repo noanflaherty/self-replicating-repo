@@ -11,7 +11,7 @@ import { githubAuthTokenSelector, isLoggedInSelector, githubUserDataSelector } f
 
 // Import components
 import { WelcomeMessage } from '../components/welcomeMessage.jsx';
-import { Button } from '../components/genericButton.jsx';
+import { Button } from 'react-bootstrap';
 import CopyAppToRepo from './copyAppToRepo.jsx';
 
 class Home extends Component {
@@ -22,12 +22,19 @@ class Home extends Component {
   renderBody = () => {
     if (this.props.isLoggedIn) {
       return (
-        <div>
-          <CopyAppToRepo/>
-          <Button
-            handleClick={this.props.logout}
-            buttonText='Log Out'
-            />
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12 center-block">
+              <CopyAppToRepo/>
+            </div>
+          </div>
+          <div className="row">
+            <Button
+              bsStyle='link'
+              onClick={this.props.logout}
+              >Log Out
+            </Button>
+          </div>
         </div>
       );
     } else {
@@ -40,12 +47,16 @@ class Home extends Component {
   render() {
     const { isLoggedIn, user, logout } = this.props;
     return (
-      <div>
-        <WelcomeMessage
-          isLoggedIn={isLoggedIn}
-          userData={user}
-          />
-        {this.renderBody(isLoggedIn, logout)}
+      <div className="container">
+        <div className="row">
+          <div className="col-sm">
+            <WelcomeMessage
+              isLoggedIn={this.props.isLoggedIn}
+              userData={this.props.user}
+              />
+            {this.renderBody(isLoggedIn, logout)}
+          </div>
+        </div>
       </div>
     );
   }

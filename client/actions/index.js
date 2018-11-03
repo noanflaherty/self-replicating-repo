@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 import { loadTokenFromLocalStorage } from '../utils/localStorage';
-import { githubAuthTokenSelector } from '../selectors/index';
+import { githubAuthTokenSelector, isLoggedInSelector } from '../selectors/index';
 
 export const AUTH_TOKEN_LOADED_FROM_LOCAL_STORAGE = 'AUTH_TOKEN_LOADED_FROM_LOCAL_STORAGE';
 export const LOGIN_STARTED = 'LOGIN_STARTED';
@@ -80,7 +80,11 @@ export const loadTokenAndGetUser = () => {
     dispatch(getAuthTokenFromLocalStorage());
 
     const token = githubAuthTokenSelector(getState());
-    dispatch(fetchUserData(token));
+    const isLoggedIn = isLoggedInSelector(getState());
+
+    if (isLoggedIn) {
+      dispatch(fetchUserData(token));
+    }
   };
 };
 
@@ -113,15 +117,13 @@ export const fetchedUserData = (resp) => {
   };
 };
 
-export const copyAppToNewRepo = (repoName) => {
+export const copyAppToNewRepo = (values) => {
+
+  const repoName = values.repoName;
 
   return (dispatch, getState) => {
 
-    console.log(repoName);
-
     dispatch(startedCopyingAppToRepo());
-
-    console.log('Inside action');
 
     const token = githubAuthTokenSelector(getState());
     const url = `/api/github/copy-app-to-repo`;
@@ -152,7 +154,6 @@ export const startedCopyingAppToRepo = () => {
 };
 
 export const copyAppToRepoSuccessful = (resp) => {
-  console.log(resp);
   return {
     type: COPY_APP_TO_REPO_SUCCESSFUL,
     payload: resp,

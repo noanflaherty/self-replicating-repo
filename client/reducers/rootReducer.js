@@ -5,6 +5,7 @@ import { github } from './githubReducer';
 
 const rootReducer = combineReducers({
   github,
+  form: formReducer,
 });
 
 export default rootReducer;
