@@ -8,7 +8,7 @@ from github import Github, GithubException
 
 from server.utils.utils import getAllFilesWPathsInDirectory
 
-DEFAULT_DIRS_TO_AVOID = set(['./.git', './env', './node_modules', './server/static/javascript', '.profile.d/', '.heroku/'])
+DEFAULT_DIRS_TO_AVOID = set(['./.git', './env', './node_modules', './server/static/javascript', './.profile.d', './.heroku'])
 DEFAULT_EXTENSIONS_TO_AVOID = set(['pyc', 'log', 'python_history'])
 
 github_api = Api(Blueprint('github_api', __name__))
