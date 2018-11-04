@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Field, reduxForm } from 'redux-form';
+import config from 'config'; // Import config to get default repo name.
 
 // Import components
 import { Button } from 'react-bootstrap';
@@ -42,7 +43,7 @@ CopyAppToRepoForm = reduxForm({
   form: 'copyAppToRepo',
   onSubmit: submitForm, // Associates the form submit event with our external actionc reator.
   initialValues: {
-    repoName: 'self-replicating-repo', // Set this as the default repo name
+    repoName: config.APP.default_repo_name, // Set this as the default repo name
   },
 })(CopyAppToRepoForm);
 

@@ -13,10 +13,7 @@ var config = {
     filename: 'bundle.js',
   },
   externals: {
-    config: JSON.stringify(process.env.NODE_ENV === 'prod' ? ini
-      .parse(fs.readFileSync('./config_files/prod_config.ini', 'utf-8'))
-        : (process.env.NODE_ENV === 'dev' ? ini
-      .parse(fs.readFileSync('./config_files/local_config.ini', 'utf-8')) : '{}')),
+    config: JSON.stringify(ini.parse(fs.readFileSync('./configs/client_config.ini', 'utf-8'))),
   },
   devtool: '#cheap-module-source-map.',
   module: {

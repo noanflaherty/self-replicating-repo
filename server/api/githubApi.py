@@ -49,7 +49,6 @@ class Copy_App_To_New_Repo(Resource):
     def post(self):
 
         repo_name = self.repo_name
-        add_to_existing = self.add_to_existing
 
         g = Github(self.token)
 
@@ -110,13 +109,11 @@ class Copy_App_To_New_Repo(Resource):
     def __init__(self):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('token', required=True, location='json')
-        self.reqparse.add_argument('repoName', required=False, location='json')
-        self.reqparse.add_argument('addToExisting', required=False, location='json')
+        self.reqparse.add_argument('repoName', required=True, location='json')
 
         self.args = self.reqparse.parse_args()
         self.token = self.args.get('token')
-        self.repo_name = self.args.get('repoName') or app.config.get('DEFAULT_REPO_NAME')
-        self.add_to_existing = self.args.get('addToExisting') or False
+        self.repo_name = self.args.get('repoName')
 
         super(Copy_App_To_New_Repo, self).__init__()
 
@@ -131,5 +128,5 @@ def handleGithubError(error, data={}):
         'error': errorData,
     }
 
-    print(resp, status)
+    logger.debug('Received GitHub Error with Status {status}. Error: {errorData}'.format(status=status, errorData=errorData))
     return resp, status

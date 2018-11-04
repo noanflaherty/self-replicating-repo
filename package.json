@@ -1,25 +1,25 @@
 {
-  "name": "sfdctsd",
+  "name": "self-replicating-repo",
   "version": "0.1.0",
-  "description": "Used to create time-series data pulls from Salesforce.",
+  "description": "Used to copy this App to a new repo in your GitHub account..",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "NODE_ENV=dev && webpack -d --watch",
-    "build": "NODE_ENV=prod && webpack -p"
+    "dev": "cross-env NODE_ENV=dev webpack --config webpack.config.js --watch  --mode development",
+    "build": "cross-env NODE_ENV=prod webpack --config webpack.config.js  --mode production"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/noanflaherty/sfdc-time-series-data.git"
+    "url": "git+https://github.com/noanflaherty/self-replicating-repo.git"
   },
   "keywords": [
-    "data",
     "python",
     "react",
+    "redux",
     "flask"
   ],
   "author": "Noa Flaherty",
-  "license": "",
+  "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "cross-env": "^5.2.0",
     "css-loader": "^1.0.1",
     "ini": "^1.3.5",
     "react": "^16.6.0",
