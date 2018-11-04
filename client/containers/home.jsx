@@ -21,13 +21,19 @@ class Home extends Component {
   renderBody = () => {
     if (this.props.isLoggedIn) {
       return (
-        <div>
-          <CopyAppToRepo/>
-          <button
-            className='btn btn-link'
-            onClick={this.props.logout}
-            >Log Out
-          </button>
+        <div className="container">
+          <div className="row">
+            <CopyAppToRepo/>
+          </div>
+          <div className="row justify-content-center"  style={{paddingTop: '80px'}}>
+            <div className="col-12 text-center">
+              <button
+                className="btn btn-link "
+                onClick={this.props.logout}
+                >Log Out
+              </button>
+            </div>
+          </div>
         </div>
       );
     } else {
