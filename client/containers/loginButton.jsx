@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import GitHubLogin from 'react-github-login';
-import config from 'config';
+import { clientConfig } from '../clientConfig';
 
 // Import action creators
 import { loginStarted, fetchAuthToken, loginFailure } from '../actions/index';
@@ -12,9 +12,9 @@ class LoginButton extends Component {
 
   render() {
     const AUTH_URI = 'https://github.com/login/oauth/authorize';
-    const CLIENT_ID = config.GITHUB.client_id;
-    const REDIRECT_URI = config.GITHUB.redirect_uri;
-    const SCOPE = config.GITHUB.default_scope;
+    const CLIENT_ID = clientConfig.github.clientId;
+    const REDIRECT_URI = clientConfig.github.redirectUri;
+    const SCOPE = clientConfig.github.defaultScope;
 
     return (
       <div>

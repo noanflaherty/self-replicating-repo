@@ -12,9 +12,6 @@ var config = {
     path: BUILD_DIR,
     filename: 'bundle.js',
   },
-  externals: {
-    config: JSON.stringify(ini.parse(fs.readFileSync('./configs/client_config.ini', 'utf-8'))),
-  },
   devtool: '#cheap-module-source-map.',
   module: {
     rules: [

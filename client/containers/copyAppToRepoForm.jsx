@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Field, reduxForm } from 'redux-form';
-import config from 'config'; // Import config to get default repo name.
+import { clientConfig } from '../clientConfig'; // Import config to get default repo name.
 
 // Import components
 import { Button } from 'react-bootstrap';
@@ -43,7 +43,7 @@ CopyAppToRepoForm = reduxForm({
   form: 'copyAppToRepo',
   onSubmit: submitForm, // Associates the form submit event with our external actionc reator.
   initialValues: {
-    repoName: config.APP.default_repo_name, // Set this as the default repo name
+    repoName: clientConfig.app.defaultRepoName, // Set this as the default repo name
   },
 })(CopyAppToRepoForm);
 

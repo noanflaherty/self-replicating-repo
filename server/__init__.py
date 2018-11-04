@@ -25,11 +25,6 @@ logger = app.logger
 LOG_FILE_NAME = 'logs/log.log'
 formatter = logging.Formatter("[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
 
-# logFileHandler = RotatingFileHandler(LOG_FILE_NAME, maxBytes=10000000, backupCount=5)
-# logFileHandler.setLevel(logging.DEBUG)
-# logFileHandler.setFormatter(formatter)
-# logger.addHandler(logFileHandler)
-
 stdoutLogHandler = logging.StreamHandler(stream=sys.stdout)
 stdoutLogHandler.setLevel(logging.DEBUG)
 stdoutLogHandler.setFormatter(formatter)
