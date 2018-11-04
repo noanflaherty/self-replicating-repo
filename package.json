@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=dev webpack --config webpack.config.js --watch  --mode development",
-    "build": "cross-env NODE_ENV=prod webpack --config webpack.config.js --mode production",
-    "heroku-postbuild": "cross-env NODE_ENV=prod webpack -p --config ./webpack.config.js --progress --mode production"
+    "dev": "cross-env NODE_ENV=dev webpack --config ./webpack.config.js --watch  --mode development",
+    "build": "cross-env NODE_ENV=prod webpack -p --config ./webpack.config.js --mode production",
+    "heroku-postbuild": "cross-env NODE_ENV=prod webpack -p --config ./webpack.config.js --mode production"
   },
   "repository": {
     "type": "git",

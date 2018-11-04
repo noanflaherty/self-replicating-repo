@@ -1,6 +1,4 @@
 var webpack = require('webpack');
-var ini = require('ini');
-var fs = require('fs');
 
 var path = require('path');
 var APP_DIR = path.resolve(__dirname, 'client');
