@@ -21,17 +21,16 @@ import Home from './containers/home.jsx';
 import { loadTokenFromLocalStorage, saveTokenToLocalStorage } from './utils/localStorage';
 
 // Setup redux dev tools
-const composeSetup = process.env.NODE_ENV !== 'prod' && typeof window === 'object' &&
+const composeEnhancer = process.env.NODE_ENV !== 'prod' && typeof window === 'object' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
 
 const store = createStore(
   rootReducer,
-  composeSetup(),
-  applyMiddleware(
+  composeEnhancer(applyMiddleware(
     ReduxPromise,
     thunk,
-  )
+  ))
 );
 
 store.subscribe(throttle(() => {

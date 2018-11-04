@@ -62,7 +62,7 @@ const loginSuccess = (response) => {
   };
 };
 
-const loginFailure = error => (
+export const loginFailure = error => (
   {
     type: LOGIN_FAILURE,
     payload: error,
