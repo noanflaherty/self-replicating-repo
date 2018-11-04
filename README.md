@@ -1,7 +1,20 @@
 # Self-Replicating Repo
 
+This is a self-replicating app that allows you to authenticate with your GitHub account and create a new repo containing all of this app's files. It can be used to quickly create new repos with boilerplate code.
 
+This fully-functioning web-app demonstrates the use of a Python/Flask backend with a React-Redux front-end and GitHub OAuth2 authentication.
 
+## Getting Started
+
+This app is currently set up to be deployed to Heroku. You can test a live functioning version of this app at <https://nf-self-replicating-repo.herokuapp.com/>. Instructions for building yourself locally are below.
+
+## Prerequisites
+
+To be able to build this app and run it locally, you must have the following installed:
+* Python 2 or 3
+* pip, for installing Python packages
+* virtualenv, a pip package for creating virtual Python environemnts
+* npm for building the front end
 
 ## Building Locally
 
@@ -43,3 +56,12 @@
    $ gunicorn --bind 0.0.0.0:8000 wsgi
    $ npm run build
    ```
+
+## Authors
+
+* **Noa Flaherty**
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/noanflaherty/self-replicating-repo/blob/master/LICENSE) file for details
