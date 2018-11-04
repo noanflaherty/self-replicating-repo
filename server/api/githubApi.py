@@ -65,17 +65,7 @@ class Copy_App_To_New_Repo(Resource):
             data = {
                 'repoName': repo_name,
             }
-
-            try:
-                print ('Trying to fetch existing repo with name: {}'.format(repo_name))
-                existing_repo = user.get_repo(repo_name)
-                print ('Found existing repo: {}'.format(existing_repo))
-                existing_repo_name = existing_repo.name
-
-                return handleGithubError(repo_creation_error, data=data)
-
-            except GithubException as existing_repo_retrieval_error:
-                return handleGithubError(existing_repo_retrieval_error, data=data)
+            return handleGithubError(repo_creation_error, data=data)
 
         # If we successfully created the repo, then we can prep all files in this app to add to the repo.
         files = getAllFilesWPathsInDirectory('.', dirsToAvoid=DEFAULT_DIRS_TO_AVOID, extensionsToAvoid=DEFAULT_EXTENSIONS_TO_AVOID)
