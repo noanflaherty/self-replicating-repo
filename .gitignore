@@ -4,3 +4,5 @@ flask_session/
 node_modules/
 
 *.pyc
+server/static/javascript/bundle.js
+server/static/javascript/bundle.js.map
