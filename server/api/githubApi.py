@@ -54,11 +54,13 @@ class Copy_App_To_New_Repo(Resource):
 
         # Since creating a repo happens on the user obejct, we must fetch the user first.
         user = g.get_user()
+        user_login = user.login
 
         # Try to create the repo. Creation will fail if a repo has already been created with that name.
         try:
-            print('Trying to create new repo with name: {}'.format(repo_name))
+            logger.debug('Trying to create new repo with name: {}'.format(repo_name))
             repo = user.create_repo(repo_name)
+            new_repo_name = repo.name
         # If we fail to create a repo, we check to see if it was because there was already one with that name
         except GithubException as repo_creation_error:
             data = {
@@ -82,9 +84,9 @@ class Copy_App_To_New_Repo(Resource):
                 continue
 
             file_path_formatted = file_path[2:]
-            commit_message = 'Committing file {file_num} of {num_files}: {file_path}'.format(file_num=i+1, num_files=len(files), file_path=file_path_formatted)
+            commit_message = 'Committing file {file_num} of {num_files} for {user_login} to {repo_name}: {file_path}'.format(file_num=i+1, num_files=len(files), user_login=user_login, repo_name=new_repo_name, file_path=file_path_formatted)
 
-            print(commit_message)
+            logger.debug(commit_message)
 
             try:
                 # Ideally Github would allow us to add our files in batches, rather than one at a time,
@@ -98,7 +100,7 @@ class Copy_App_To_New_Repo(Resource):
                 files_failed.append(file_path_formatted)
 
         results = {
-            'repoName': repo_name,
+            'repoName': new_repo_name,
             'successfullyAdded':  files_added_successfully,
             'failed': files_failed,
         }
