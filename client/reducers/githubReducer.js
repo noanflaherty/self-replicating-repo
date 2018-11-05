@@ -13,7 +13,7 @@ import {
 export const initialState = {
   token: null,
   loggingIn: false,
-  loginError: null,
+  loginError: false,
   user: {},
   loadingResults: false,
   results: {},
@@ -31,18 +31,19 @@ export const github = (state = initialState, action) => {
       return {
         ...state,
         loggingIn: true,
+        loginError: false,
       };
     case LOGIN_SUCCESS:
       return {
         ...state,
         token: action.payload.access_token,
         loggingIn: false,
-        loginError: null,
+        loginError: false,
       };
     case LOGIN_FAILURE:
       return {
         ...initialState,
-        loginError: action.payload.response,
+        loginError: true,
       };
     case LOGOUT:
       return initialState;

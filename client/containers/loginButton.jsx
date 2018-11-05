@@ -22,7 +22,7 @@ class LoginButton extends Component {
           clientId={CLIENT_ID}
           onRequest={() => this.props.loginStarted()}
           onSuccess={(resp) => this.props.fetchAuthToken(resp)}
-          onFailure={(error) => this.props.loginFailure(error)}
+          onFailure={() => this.props.loginFailure()}
           redirectUri={REDIRECT_URI}
           scope={SCOPE}
           buttonText='Connect GitHub'

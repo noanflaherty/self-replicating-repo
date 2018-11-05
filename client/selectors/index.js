@@ -9,6 +9,7 @@ const copyAppToRepoResultsErrorSelector = state => state.github.resultsError;
 export const githubAuthTokenSelector = state => state.github.token;
 export const githubUserDataSelector = state => state.github.user;
 export const isLoadingCopyAppToRepoResultsSelector = state => state.github.loadingResults;
+export const loginErrorSelector = state => state.github.loginError;
 
 export const isLoggedInSelector = createSelector(
   [githubAuthTokenSelector],

@@ -7,7 +7,12 @@ import { Link } from 'react-router-dom';
 import { loadTokenAndGetUser, logout } from '../actions/index';
 
 // Import selectors
-import { githubAuthTokenSelector, isLoggedInSelector, githubUserDataSelector } from '../selectors/index';
+import {
+  githubAuthTokenSelector,
+  isLoggedInSelector,
+  loginErrorSelector,
+  githubUserDataSelector
+} from '../selectors/index';
 
 // Import components
 import { WelcomeMessage } from '../components/welcomeMessage.jsx';
@@ -41,7 +46,7 @@ class Home extends Component {
           </div>
         </div>
       );
-    } else {
+    } else if (true) {
       return (
         <div></div>
       );
@@ -62,6 +67,7 @@ class Home extends Component {
         <div style={{paddingBottom: '30px'}}>
           <WelcomeMessage
             isLoggedIn={this.props.isLoggedIn}
+            loginError={this.props.loginError}
             userData={this.props.user}
             />
         </div>
@@ -74,6 +80,7 @@ class Home extends Component {
 function mapStateToProps(state) {
   return {
     token: githubAuthTokenSelector(state),
+    loginError: loginErrorSelector(state),
     isLoggedIn: isLoggedInSelector(state),
     user: githubUserDataSelector(state),
   };
