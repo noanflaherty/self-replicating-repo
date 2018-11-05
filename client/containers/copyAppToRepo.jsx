@@ -29,12 +29,17 @@ class CopyAppToRepo extends Component {
     const allFilesAddedFailed = (this.props.successfullyAddedFiles.length == 0 && this.props.unsuccessfullyAddedFiles.length > 0);
     const newRepoName = this.props.repoNameInResults;
 
+    const success = 'text-success';
+    const failure = 'text-danger';
+    const warning = 'text-warning';
+
     if (allFilesAddedSuccessfully) {
       return (
         <div>
-          <h3>Repo Created and App Files Added Successfully</h3>
-          <h4>Repo Created: {newRepoName}</h4>
-          <h4>Files Added:</h4>
+          <h3 class={success}>Repo Created and App Files Added Successfully!</h3>
+          <br/>
+          <h4><span class={success}>Repo Created:</span> <em>{newRepoName}</em></h4>
+          <h4 class={success}>Files Added:</h4>
           <ul>
             {_.map(this.props.successfullyAddedFiles, file => <li key={file}>{file}</li>)}
           </ul>
@@ -43,11 +48,12 @@ class CopyAppToRepo extends Component {
     } else if (allFilesAddedFailed) {
       return (
         <div>
-          <h3>Repo Created But Failed To Add Files</h3>
-          <h4>Repo Created: {newRepoName}</h4>
-          <h4>Files Failed:</h4>
+          <h3 class={warning}>Repo Created But Failed To Add Files</h3>
+          <br/>
+          <h4><span class={success}>Repo Created:</span> <em>{newRepoName}</em></h4>
+          <h4 className={failure}>Files Failed:</h4>
           <ul>
-            {_.map(this.props.unsuccessfullyAddedFiles, file => <li key={file}>{file}</li>)}
+            {_.map(this.props.unsuccessfullyAddedFiles, file => <li className={failure} key={file}>{file}</li>)}
           </ul>
         </div>
       );
@@ -55,14 +61,15 @@ class CopyAppToRepo extends Component {
       return (
         <div>
           <h3>Repo Created and Some App Files Added Successfully</h3>
-          <h4>Repo Created: {newRepoName}</h4>
-          <h4>Files Added:</h4>
+          <br/>
+          <h4><span class={success}>Repo Created:</span> <em>{newRepoName}</em></h4>
+          <h4 class={success}>Files Added:</h4>
           <ul>
             {_.map(this.props.successfullyAddedFiles, file => <li key={file}>{file}</li>)}
           </ul>
-          <h4>Files Failed:</h4>
+          <h4 className={failure}>Files Failed:</h4>
           <ul>
-            {_.map(this.props.unsuccessfullyAddedFiles, file => <li key={file}>{file}</li>)}
+            {_.map(this.props.unsuccessfullyAddedFiles, file => <li className={failure} key={file}>{file}</li>)}
           </ul>
         </div>
       );
@@ -73,24 +80,43 @@ class CopyAppToRepo extends Component {
 
     if (this.props.resultsAreLoading) {
       return (
-        <div>Loading...</div>
+        <div className="container">
+          <div className="row">
+            <div className="col-12 text-center">
+              <h3>Loading...</h3>
+              <p>(This may take up to 60 seconds)</p>
+            </div>
+          </div>
+        </div>
       );
     } else {
       if (this.props.resultsError != null) {
         const errorMessage = this.props.resultsError.message;
         const attemptedRepoName = this.props.attemptedRepoName;
         return (
-          <div>
-            <h2>Error Creating Repo</h2>
-            <p>{`Failed to create a new repository with the name "${attemptedRepoName}". Please try a different repo name.`}</p>
-            <CopyAppToRepoForm/>
+          <div className="container">
+            <div className="row">
+              <div className="col-12">
+                <h3 className="text-danger">Error Creating Repo</h3>
+                <p className="text-danger">{`Failed to create a new repository with the name "${attemptedRepoName}". Please try a different repo name.`}</p>
+                <CopyAppToRepoForm/>
+              </div>
+            </div>
           </div>
         );
       } else if (this.props.resultsAreLoaded) {
         return (
-          <div>
-            <div>{this.renderResults()}</div>
-            <CopyAppToRepoForm/>
+          <div className="container">
+            <div className="row">
+              <div className="col-12">
+                <div>{this.renderResults()}</div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-12">
+                <CopyAppToRepoForm/>
+              </div>
+            </div>
           </div>
         );
       } else {

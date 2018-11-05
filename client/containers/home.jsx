@@ -20,17 +20,22 @@ class Home extends Component {
 
   renderBody = () => {
     if (this.props.isLoggedIn) {
+      const bodyStyle = {
+        minHeight: '300px',
+        paddingBottom: '80px',
+      };
+
       return (
         <div className="container">
-          <div className="row">
+          <div className="row" style={bodyStyle}>
             <CopyAppToRepo/>
           </div>
-          <div className="row justify-content-center"  style={{paddingTop: '80px'}}>
+          <div className="row justify-content-center">
             <div className="col-12 text-center">
               <button
                 className="btn btn-link "
                 onClick={this.props.logout}
-                >Log Out
+                >Disconnect GitHub Account
               </button>
             </div>
           </div>
@@ -46,12 +51,20 @@ class Home extends Component {
   render() {
     const { isLoggedIn, user, logout } = this.props;
 
+    const containerStyle = {
+      maxWidth: '550px',
+      marginTop: '50px',
+      marginBottom: '50px',
+    };
+
     return (
-      <main role="main" className="container">
-        <WelcomeMessage
-          isLoggedIn={this.props.isLoggedIn}
-          userData={this.props.user}
-          />
+      <main role="main" className="container" style={containerStyle}>
+        <div style={{paddingBottom: '30px'}}>
+          <WelcomeMessage
+            isLoggedIn={this.props.isLoggedIn}
+            userData={this.props.user}
+            />
+        </div>
         {this.renderBody(isLoggedIn, logout)}
       </main>
     );
