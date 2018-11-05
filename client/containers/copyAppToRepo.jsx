@@ -17,7 +17,7 @@ import {
   successfullyAddedFilesSelector,
   unsuccessfullyAddedFilesSelector,
   repoNameInResultsSelector,
-  copyAppToRepoResultsErrorDataSelector,
+  copyAppToRepoResultsErrorSelector,
   attemptedRepoNameSelector,
 } from '../selectors/index';
 
@@ -91,19 +91,49 @@ class CopyAppToRepo extends Component {
       );
     } else {
       if (this.props.resultsError != null) {
-        const errorMessage = this.props.resultsError.message;
-        const attemptedRepoName = this.props.attemptedRepoName;
-        return (
-          <div className="container">
-            <div className="row">
-              <div className="col-12">
-                <h3 className="text-danger">Error Creating Repo</h3>
-                <p className="text-danger">{`Failed to create a new repository with the name "${attemptedRepoName}". Please try a different repo name.`}</p>
-                <CopyAppToRepoForm/>
+        const errorStatusCode = this.props.resultsError.status;
+
+        if (errorStatusCode == 503) {
+          return (
+            <div className="container">
+              <div className="row">
+                <div className="col-12">
+                  <h3 className="text-danger">Error Finishing Request</h3>
+                  <p className="text-danger">{`The request timed out while in the process of committing all files. A repo with the name "${attemptedRepoName}" has been created and some files have been added. Please try again using a new repo name.`}</p>
+                  <CopyAppToRepoForm/>
+                </div>
               </div>
             </div>
-          </div>
-        );
+          );
+        } else if (errorStatusCode == 422) {
+          const errorMessage = this.props.resultsError.message;
+          const attemptedRepoName = this.props.attemptedRepoName;
+          return (
+            <div className="container">
+              <div className="row">
+                <div className="col-12">
+                  <h3 className="text-danger">Error Creating Repo</h3>
+                  <p className="text-danger">{`Failed to create a new repository with the name "${attemptedRepoName}". Please try a different repo name.`}</p>
+                  <CopyAppToRepoForm/>
+                </div>
+              </div>
+            </div>
+          );
+        } else {
+           const errorStatusCode = this.props.resultsError.status;
+           const errorStatusText = this.props.resultsError.statusText;
+           return (
+             <div className="container">
+               <div className="row">
+                 <div className="col-12">
+                   <h3 className="text-danger">Error Processing Request</h3>
+                   <p className="text-danger">{`Received Error ${errorStatusCode}: ${errorStatusText}". Please try aagain.`}</p>
+                   <CopyAppToRepoForm/>
+                 </div>
+               </div>
+             </div>
+           );
+        }
       } else if (this.props.resultsAreLoaded) {
         return (
           <div className="container">
@@ -135,7 +165,7 @@ function mapStateToProps(state) {
     successfullyAddedFiles: successfullyAddedFilesSelector(state),
     unsuccessfullyAddedFiles: unsuccessfullyAddedFilesSelector(state),
     repoNameInResults: repoNameInResultsSelector(state),
-    resultsError: copyAppToRepoResultsErrorDataSelector(state),
+    resultsError: copyAppToRepoResultsErrorSelector(state),
     attemptedRepoName: attemptedRepoNameSelector(state),
   };
 }
