@@ -11,7 +11,6 @@ import { githubAuthTokenSelector, isLoggedInSelector, githubUserDataSelector } f
 
 // Import components
 import { WelcomeMessage } from '../components/welcomeMessage.jsx';
-import { Button } from 'react-bootstrap';
 import CopyAppToRepo from './copyAppToRepo.jsx';
 
 class Home extends Component {
@@ -21,19 +20,24 @@ class Home extends Component {
 
   renderBody = () => {
     if (this.props.isLoggedIn) {
+      const bodyStyle = {
+        minHeight: '300px',
+        paddingBottom: '80px',
+      };
+
       return (
         <div className="container">
-          <div className="row">
-            <div className="col-md-12 center-block">
-              <CopyAppToRepo/>
-            </div>
+          <div className="row" style={bodyStyle}>
+            <CopyAppToRepo/>
           </div>
-          <div className="row">
-            <Button
-              bsStyle='link'
-              onClick={this.props.logout}
-              >Log Out
-            </Button>
+          <div className="row justify-content-center">
+            <div className="col-12 text-center">
+              <button
+                className="btn btn-link "
+                onClick={this.props.logout}
+                >Disconnect GitHub Account
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -46,18 +50,23 @@ class Home extends Component {
 
   render() {
     const { isLoggedIn, user, logout } = this.props;
+
+    const containerStyle = {
+      maxWidth: '550px',
+      marginTop: '50px',
+      marginBottom: '50px',
+    };
+
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm">
-            <WelcomeMessage
-              isLoggedIn={this.props.isLoggedIn}
-              userData={this.props.user}
-              />
-            {this.renderBody(isLoggedIn, logout)}
-          </div>
+      <main role="main" className="container" style={containerStyle}>
+        <div style={{paddingBottom: '30px'}}>
+          <WelcomeMessage
+            isLoggedIn={this.props.isLoggedIn}
+            userData={this.props.user}
+            />
         </div>
-      </div>
+        {this.renderBody(isLoggedIn, logout)}
+      </main>
     );
   }
 }

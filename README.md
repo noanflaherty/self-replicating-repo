@@ -1,8 +1,8 @@
 # Self-Replicating Repo
 
-This is a self-replicating repo that allows you to authenticate with your GitHub account and create a new repo containing all of this app's files. It can be used to quickly create new repos with boilerplate code.
+This is a self-replicating repo that allows you to connect your GitHub account and create a new repo containing all of this app's files. It can be used to quickly create new repos with boilerplate code.
 
-This fully-functioning web-app demonstrates the use of a Python/Flask backend with a React-Redux frontend and GitHub OAuth2 authentication. More on how it works below under "Technical Specifications."
+This web-app demonstrates the use of a Python/Flask backend with a React-Redux frontend and GitHub OAuth2 authentication. More on how it works below under "Technical Specifications."
 
 ## Getting Started
 

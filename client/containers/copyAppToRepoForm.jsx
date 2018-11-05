@@ -4,9 +4,6 @@ import { bindActionCreators } from 'redux';
 import { Field, reduxForm } from 'redux-form';
 import { clientConfig } from '../clientConfig'; // Import config to get default repo name.
 
-// Import components
-import { Button } from 'react-bootstrap';
-
 // Import action creators
 import { copyAppToNewRepo } from '../actions/index';
 
@@ -16,14 +13,17 @@ class CopyAppToRepoForm extends Component {
     return (
       <div>
         <form onSubmit={this.props.handleSubmit}>
-        <div>
-          <Field name="repoName" component="input" type="text" />
-        </div>
-        <Button
-          bsStyle="primary"
-          type='submit'
-          >Copy App To New Repo
-        </Button>
+          <fieldset>
+            <div className="form-group">
+              <label htmlFor="repoName">New Repo Name</label>
+              <Field type="text" className="form-control" name="repoName" id="repoName" component="input" />
+            </div>
+            <button
+              className="btn btn-primary"
+              type='submit'
+              >Copy App To New Repo
+            </button>
+          </fieldset>
         </form>
       </div>
     );

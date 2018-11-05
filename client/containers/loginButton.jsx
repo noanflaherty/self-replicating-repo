@@ -25,7 +25,7 @@ class LoginButton extends Component {
           onFailure={(error) => this.props.loginFailure(error)}
           redirectUri={REDIRECT_URI}
           scope={SCOPE}
-          buttonText='Log In'
+          buttonText='Connect GitHub'
           className="btn btn-primary"
           />
       </div>
