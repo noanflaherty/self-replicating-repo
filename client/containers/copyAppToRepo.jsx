@@ -36,10 +36,10 @@ class CopyAppToRepo extends Component {
     if (allFilesAddedSuccessfully) {
       return (
         <div>
-          <h3 class={success}>Repo Created and App Files Added Successfully!</h3>
+          <h3 class={success}>Repo created and app files added successfully!</h3>
           <br/>
-          <h4><span class={success}>Repo Created:</span> <em>{newRepoName}</em></h4>
-          <h4 class={success}>Files Added:</h4>
+          <h4><span class={success}>Repo created:</span> <em>{newRepoName}</em></h4>
+          <h4 class={success}>Files added:</h4>
           <ul>
             {_.map(this.props.successfullyAddedFiles, file => <li key={file}>{file}</li>)}
           </ul>
@@ -48,10 +48,10 @@ class CopyAppToRepo extends Component {
     } else if (allFilesAddedFailed) {
       return (
         <div>
-          <h3 class={warning}>Repo Created But Failed To Add Files</h3>
+          <h3 class={warning}>Repo created, but failed to add files</h3>
           <br/>
-          <h4><span class={success}>Repo Created:</span> <em>{newRepoName}</em></h4>
-          <h4 className={failure}>Files Failed:</h4>
+          <h4><span class={success}>Repo created:</span> <em>{newRepoName}</em></h4>
+          <h4 className={failure}>Files failed:</h4>
           <ul>
             {_.map(this.props.unsuccessfullyAddedFiles, file => <li className={failure} key={file}>{file}</li>)}
           </ul>
@@ -60,14 +60,14 @@ class CopyAppToRepo extends Component {
     } else {
       return (
         <div>
-          <h3>Repo Created and Some App Files Added Successfully</h3>
+          <h3>Repo created and some app files added successfully</h3>
           <br/>
-          <h4><span class={success}>Repo Created:</span> <em>{newRepoName}</em></h4>
-          <h4 class={success}>Files Added:</h4>
+          <h4><span class={success}>Repo created:</span> <em>{newRepoName}</em></h4>
+          <h4 class={success}>Files added:</h4>
           <ul>
             {_.map(this.props.successfullyAddedFiles, file => <li key={file}>{file}</li>)}
           </ul>
-          <h4 className={failure}>Files Failed:</h4>
+          <h4 className={failure}>Files failed:</h4>
           <ul>
             {_.map(this.props.unsuccessfullyAddedFiles, file => <li className={failure} key={file}>{file}</li>)}
           </ul>
