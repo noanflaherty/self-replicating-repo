@@ -3,7 +3,7 @@ export const clientConfig = {
     defaultRepoName: 'self-replicating-repo',
   },
   github: {
-    clientId: 'a2095cdeb6ef908ffafb',
+    clientId: '4851d210ea350c0dc4f1',
     redirectUri: (process.env.NODE_ENV == 'production' ? 'https://nf-self-replicating-repo.herokuapp.com/login' : 'http://0.0.0.0:8000/login'),
     defaultScope: 'user public_repo',
   },
