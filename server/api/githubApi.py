@@ -8,6 +8,8 @@ from github import Github, GithubException
 
 from server.utils.utils import getAllFilesWPathsInDirectory
 
+from server.tasks import add
+
 DEFAULT_DIRS_TO_AVOID = set(['./.git', './env', './node_modules', './server/static/javascript', './.profile.d', './.heroku'])
 DEFAULT_EXTENSIONS_TO_AVOID = set(['pyc', 'log', 'python_history'])
 
@@ -118,6 +120,27 @@ class Copy_App_To_New_Repo(Resource):
         self.repo_name = self.args.get('repoName')
 
         super(Copy_App_To_New_Repo, self).__init__()
+
+
+@github_api.resource('/add')
+class Add(Resource):
+
+    def post(self):
+
+        add.delay(self.x, self.y)
+
+        return {}
+
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('x', type=int, required=True, location='args')
+        self.reqparse.add_argument('y', type=int, required=True, location='args')
+
+        self.args = self.reqparse.parse_args()
+        self.x = self.args.get('x')
+        self.y = self.args.get('y')
+
+        super(Add, self).__init__()
 
 
 
