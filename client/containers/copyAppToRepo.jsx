@@ -99,7 +99,7 @@ class CopyAppToRepo extends Component {
               <div className="row">
                 <div className="col-12">
                   <h3 className="text-danger">Error Finishing Request</h3>
-                  <p className="text-danger">{`The request timed out while in the process of committing all files. A repo with the name "${attemptedRepoName}" has been created and some files have been added. Please try again using a new repo name.`}</p>
+                  <p className="text-danger">{`The request timed out while in the process of committing all files. A repo with the name "${this.props.attemptedRepoName}" has been created and some files have been added. Please try again using a new repo name.`}</p>
                   <CopyAppToRepoForm/>
                 </div>
               </div>
