@@ -1,6 +1,14 @@
-from flask import Flask, session, request, redirect, url_for, abort
-from flask.json import jsonify
-from requests_oauthlib import OAuth2Session
+from flask import (
+    Flask,
+    session,
+    request,
+    redirect,
+    url_for,
+    abort,
+    jsonify
+)
+from flask_socketio import SocketIO
+from celery import Celery
 import os
 import sys
 import json
@@ -20,6 +28,9 @@ def create_app(configfile=None):
 
 ## Create the app and set configurations
 app = create_app()
+
+
+# Initialize logger
 logger = app.logger
 
 LOG_FILE_NAME = 'logs/log.log'
@@ -31,9 +42,19 @@ stdoutLogHandler.setFormatter(formatter)
 logger.addHandler(stdoutLogHandler)
 
 
+# SocketIO
+socketio = SocketIO(app)
+
+
+# Initialize Celery
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
+
+
 # Register APIs
 from server.api.githubApi import github_api
 app.register_blueprint(github_api.blueprint, url_prefix='/api/github')
+
 
 # Register views
 from server.views.index import index_view
