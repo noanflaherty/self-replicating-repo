@@ -19,7 +19,6 @@ import {
   repoNameInResultsSelector,
   copyAppToRepoResultsErrorSelector,
   attemptedRepoNameSelector,
-  userGitHubLoginSelector,
 } from '../selectors/index';
 
 class CopyAppToRepo extends Component {
@@ -29,23 +28,18 @@ class CopyAppToRepo extends Component {
     const allFilesAddedSuccessfully = (this.props.successfullyAddedFiles.length > 0 && this.props.unsuccessfullyAddedFiles.length == 0);
     const allFilesAddedFailed = (this.props.successfullyAddedFiles.length == 0 && this.props.unsuccessfullyAddedFiles.length > 0);
     const newRepoName = this.props.repoNameInResults;
-    const userLogin = this.props.userLogin;
 
     const success = 'text-success';
     const failure = 'text-danger';
     const warning = 'text-warning';
 
-    const linkToRepo = () => {
-      return <a className="text-info" href={`https://github.com/${userLogin}/${newRepoName}`} target="_blank">{newRepoName}</a>;
-    };
-
     if (allFilesAddedSuccessfully) {
       return (
         <div>
-          <h3 className={success}>Repo created and app files added successfully!</h3>
+          <h3 class={success}>Repo created and app files added successfully!</h3>
           <br/>
-          <h4><span className={success}>Repo created:</span> <em>{linkToRepo()}</em></h4>
-          <h4 className={success}>Files added:</h4>
+          <h4><span class={success}>Repo created:</span> <em>{newRepoName}</em></h4>
+          <h4 class={success}>Files added:</h4>
           <ul>
             {_.map(this.props.successfullyAddedFiles, file => <li key={file}>{file}</li>)}
           </ul>
@@ -54,9 +48,9 @@ class CopyAppToRepo extends Component {
     } else if (allFilesAddedFailed) {
       return (
         <div>
-          <h3 className={warning}>Repo created, but failed to add files</h3>
+          <h3 class={warning}>Repo created, but failed to add files</h3>
           <br/>
-          <h4><span className={success}>Repo created:</span> <em>{linkToRepo()}</em></h4>
+          <h4><span class={success}>Repo created:</span> <em>{newRepoName}</em></h4>
           <h4 className={failure}>Files failed:</h4>
           <ul>
             {_.map(this.props.unsuccessfullyAddedFiles, file => <li className={failure} key={file}>{file}</li>)}
@@ -68,8 +62,8 @@ class CopyAppToRepo extends Component {
         <div>
           <h3>Repo created and some app files added successfully</h3>
           <br/>
-          <h4><span className={success}>Repo created:</span> <em>{linkToRepo()}</em></h4>
-          <h4 className={success}>Files added:</h4>
+          <h4><span class={success}>Repo created:</span> <em>{newRepoName}</em></h4>
+          <h4 class={success}>Files added:</h4>
           <ul>
             {_.map(this.props.successfullyAddedFiles, file => <li key={file}>{file}</li>)}
           </ul>
@@ -173,7 +167,6 @@ function mapStateToProps(state) {
     repoNameInResults: repoNameInResultsSelector(state),
     resultsError: copyAppToRepoResultsErrorSelector(state),
     attemptedRepoName: attemptedRepoNameSelector(state),
-    userLogin: userGitHubLoginSelector(state),
   };
 }
 

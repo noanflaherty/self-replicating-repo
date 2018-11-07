@@ -18,13 +18,6 @@ export const isLoggedInSelector = createSelector(
   }
 );
 
-export const userGitHubLoginSelector = createSelector(
-  [githubUserDataSelector],
-  (userData) => {
-    return _.get(userData, 'login');
-  }
-);
-
 export const successfullyAddedFilesSelector = createSelector(
   [getCopyAppToRepoResults],
   (results) => {
