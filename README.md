@@ -69,6 +69,8 @@ To be able to build this app and run it locally, you must have the following ins
    $ /usr/local/sbin/rabbitmq-server
    ```
 
+   $ redis-server
+
 9. Now start the celery worker by opening another terminal tab and entering:
    ```
    $ celery -A server.celery worker --loglevel=DEBUG

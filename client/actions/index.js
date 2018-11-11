@@ -127,16 +127,20 @@ export const copyAppToNewRepo = (values) => {
     const token = githubAuthTokenSelector(getState());
     const url = `/api/github/copy-app-to-repo`;
 
-    const params = {
+    const data = {
       repoName: repoName,
-      token: token,
+    };
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     };
 
     const request = axios({
       method: 'post',
       url: url,
-      data: params,
-      config: { headers: { 'Content-Type': 'application/json' } },
+      data: data,
+      headers: headers,
     }).then(resp => {
       dispatch(copyAppToRepoSuccessful(resp.data));
     }).catch(error => {

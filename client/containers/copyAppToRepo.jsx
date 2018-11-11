@@ -133,7 +133,7 @@ class CopyAppToRepo extends Component {
                <div className="row">
                  <div className="col-12">
                    <h3 className="text-danger">Error Processing Request</h3>
-                   <p className="text-danger">{`Received Error ${errorStatusCode}: ${errorStatusText}". Please try aagain.`}</p>
+                   <p className="text-danger">{`Received Error ${errorStatusCode}: ${errorStatusText}. Please try again.`}</p>
                    <CopyAppToRepoForm/>
                  </div>
                </div>

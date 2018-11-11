@@ -19,11 +19,34 @@ from github import Github, GithubException
 from server.utils.utils import getAllFilesWPathsInDirectory
 
 
-def create_app(configfile=None):
+def create_app(config_file='app_config'):
     app = Flask(__name__)
-    app.config.from_object('app_config')
+    app.config.from_object(config_file)
     app.secret_key = app.config.get('APP_SECRET_KEY')
     return app
+
+def create_celery(app, config_file='celery_config'):
+    # Initialize Celery
+    celery = Celery(app.name)
+    celery.config_from_object(config_file)
+    celery.conf.update(
+        include='server.tasks',
+    )
+    return celery
+
+def create_logger(app, level='DEBUG'):
+    logger = app.logger
+
+    formatter = logging.Formatter("[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
+
+    stdoutLogHandler = logging.StreamHandler(stream=sys.stdout)
+    stdoutLogHandler.setLevel(level)
+    stdoutLogHandler.setFormatter(formatter)
+
+    logger.addHandler(stdoutLogHandler)
+
+    return logger
+
 
 
 ## Create the app and set configurations
@@ -31,29 +54,21 @@ app = create_app()
 
 
 # Initialize logger
-logger = app.logger
-
-LOG_FILE_NAME = 'logs/log.log'
-formatter = logging.Formatter("[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
-
-stdoutLogHandler = logging.StreamHandler(stream=sys.stdout)
-stdoutLogHandler.setLevel(logging.DEBUG)
-stdoutLogHandler.setFormatter(formatter)
-logger.addHandler(stdoutLogHandler)
+logger = create_logger(app)
 
 
 # SocketIO
 socketio = SocketIO(app)
 
-
-# Initialize Celery
-celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'], backend=app.config['CELERY_RESULT_BACKEND'])
-celery.conf.update(app.config)
+# Create celery
+celery = create_celery(app);
 
 
 # Register APIs
 from server.api.githubApi import github_api
 app.register_blueprint(github_api.blueprint, url_prefix='/api/github')
+from server.api.messageApi import message_api
+app.register_blueprint(message_api.blueprint, url_prefix='/api/message')
 
 
 # Register views
