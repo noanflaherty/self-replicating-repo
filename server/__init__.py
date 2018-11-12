@@ -8,6 +8,7 @@ from flask import (
     jsonify
 )
 from flask_socketio import SocketIO
+from flask_session import Session
 from celery import Celery
 import os
 import sys
@@ -22,7 +23,7 @@ from server.utils.utils import getAllFilesWPathsInDirectory
 def create_app(config_file='app_config'):
     app = Flask(__name__)
     app.config.from_object(config_file)
-    app.secret_key = app.config.get('APP_SECRET_KEY')
+    Session(app)
     return app
 
 def create_celery(app, config_file='celery_config'):
@@ -37,7 +38,8 @@ def create_celery(app, config_file='celery_config'):
 def create_logger(app, level='DEBUG'):
     logger = app.logger
 
-    formatter = logging.Formatter("[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
+    # formatter = logging.Formatter("[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s")
+    formatter = logging.Formatter("[%(asctime)s] %(name)s - %(levelname)s - %(message)s")
 
     stdoutLogHandler = logging.StreamHandler(stream=sys.stdout)
     stdoutLogHandler.setLevel(level)
@@ -47,6 +49,8 @@ def create_logger(app, level='DEBUG'):
 
     return logger
 
+def createSocketIO(logger=None):
+    return SocketIO(app, message_queue=app.config.get('SOCKET_MESSAGE_QUEUE'), manage_session=False, logger=logger)
 
 
 ## Create the app and set configurations
@@ -58,7 +62,7 @@ logger = create_logger(app)
 
 
 # SocketIO
-socketio = SocketIO(app)
+socketio = createSocketIO(logger)
 
 # Create celery
 celery = create_celery(app);
@@ -74,3 +78,7 @@ app.register_blueprint(message_api.blueprint, url_prefix='/api/message')
 # Register views
 from server.views.index import index_view
 app.register_blueprint(index_view)
+
+
+# Register sockets
+from server.sockets import *

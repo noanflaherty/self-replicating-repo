@@ -1,15 +1,42 @@
 from github import Github, GithubException
+import time
 
 from server import app, celery, logger
 from server.utils.utils import getAllFilesWPathsInDirectory
-
+from server.utils.githubUtils import handleGithubError, createNewRepo
+from server.utils.socketUtils import postMessage
 
 @celery.task
 def add(x, y):
     return x + y
 
+@celery.task(bind=True)
+def timer(self, n):
+
+    results = []
+
+    for i in range(n):
+        message = 'On number {} of {}'.format(i+1, n)
+        time.sleep(1)
+
+        resp = postMessage('STATUS_UPDATE', message, room=self.request.id)
+
+        logger.debug("Posting Message: {}".format(message))
+
+        results.append(i+1)
+
+        message = {
+            'message': 'Completed timer.',
+            'data': results,
+        }
+
+        resp = postMessage('COMPLETED', message, room=self.request.id)
+
+    return results
+
+
 @celery.task
-def copyAppToNewRepo(github_token, repo_name):
+def copyAppToNewRepo(github_token, repo_name, namespace, task_id=None):
 
     DEFAULT_DIRS_TO_AVOID = set(['./.git', './env', './node_modules', './server/static/javascript', './.profile.d', './.heroku'])
     DEFAULT_EXTENSIONS_TO_AVOID = set(['pyc', 'log', 'python_history'])
@@ -20,17 +47,10 @@ def copyAppToNewRepo(github_token, repo_name):
     user = g.get_user()
     user_login = user.login
 
-    # Try to create the repo. Creation will fail if a repo has already been created with that name.
-    try:
-        logger.debug('Trying to create new repo with name: {}'.format(repo_name))
-        repo = user.create_repo(repo_name)
-        new_repo_name = repo.name
-    # If we fail to create a repo, we check to see if it was because there was already one with that name
-    except GithubException as repo_creation_error:
-        data = {
-            'repoName': repo_name,
-        }
-        return handleGithubError(repo_creation_error, data=data)
+    # Create a new repo for the user. Will fail if repo name already exists
+    repo = createNewRepo(user)
+    new_repo_name = repo.name
+
 
     # If we successfully created the repo, then we can prep all files in this app to add to the repo.
     files = getAllFilesWPathsInDirectory('.', dirsToAvoid=DEFAULT_DIRS_TO_AVOID, extensionsToAvoid=DEFAULT_EXTENSIONS_TO_AVOID)
@@ -62,16 +82,3 @@ def copyAppToNewRepo(github_token, repo_name):
         except GithubException as e:
             errorMessage = e.args[1].get('message')
             files_failed.append(file_path_formatted)
-
-
-def handleGithubError(error, data={}):
-    status = error.args[0]
-    errorData = error.args[1]
-
-    resp = {
-        'data': data,
-        'error': errorData,
-    }
-
-    logger.debug('Received GitHub Error with Status {status}. Error: {errorData}'.format(status=status, errorData=errorData))
-    return resp, status

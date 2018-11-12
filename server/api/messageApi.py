@@ -10,9 +10,9 @@ from github import Github, GithubException
 from server.api.coreApi import ApiResource, Scope
 
 from server.tasks import add, copyAppToNewRepo as copyAppToNewRepoAsync
+from server.utils.socketUtils import sendMessage
 
 message_api = Api(Blueprint('message_api', __name__))
-
 
 
 class Event_Types(Enum):
@@ -20,33 +20,38 @@ class Event_Types(Enum):
     IN_PROGRESS = 'IN_PROGRESS'
     STATE_UPDATE = 'STATUS_UPDATE'
     COMPLETED = 'COMPLETED'
+    FAILED = 'FAILED'
+
+
+def getAllEventTypes():
+    return list(map(lambda event: event.value, Event_Types))
 
 
 @message_api.resource('/emit')
 class Emit_Message(ApiResource):
 
     def post(self):
-        event_type = self.event_type.value
-        toEmit = {
-            "namespace": self.namespace,
-            "eventType": event_type,
-            "message": self.message,
-        }
+        super(Emit_Message, self).post()
+        emitted = sendMessage(self.event_type.value, self.message, namespace=self.namespace, room=self.room)
 
-        socketio.emit(event_type, toEmit, namespace=self.namespace)
-
-        return toEmit
+        return emitted
 
 
     def __init__(self):
         self.scope = Scope.SERVICE
         super(Emit_Message, self).__init__()
 
-        self.add_argument('namespace', type=str, required=True, location='json')
+        self.add_argument('namespace', type=str, required=False, location='json')
         self.namespace = self.args.get('namespace')
 
         self.add_argument('eventType', type=str, required=True, location='json')
-        self.event_type = Event_Types[self.args.get('eventType')]
+        try:
+            self.event_type = Event_Types(self.args.get('eventType'))
+        except ValueError as e:
+            abort(400, message='Invalid eventType provided: {}. Valid event types include: {}'.format(self.args.get('eventType'), getAllEventTypes()))
+
+        self.add_argument('room', type=str, required=False, location='json')
+        self.room = self.args.get('room')
 
         self.add_argument('message', type=str, required=True, location='json')
         self.message = self.args.get('message')

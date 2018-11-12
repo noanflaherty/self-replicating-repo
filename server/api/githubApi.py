@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, session
 from flask_restful import Api, abort, reqparse, request
 from server import app, logger
 from flask.json import jsonify
@@ -8,7 +8,7 @@ from github import Github, GithubException
 
 from server.api.coreApi import ApiResource, Scope
 
-from server.tasks import add, copyAppToNewRepo as copyAppToNewRepoAsync
+from server.tasks import add, copyAppToNewRepo as copyAppToNewRepoAsync, timer
 
 github_api = Api(Blueprint('github_api', __name__))
 
@@ -16,7 +16,7 @@ github_api = Api(Blueprint('github_api', __name__))
 class Fetch_Github_Auth_Token(ApiResource):
 
     def post(self):
-
+        super(Fetch_Github_Auth_Token, self).post()
         token_url = 'https://github.com/login/oauth/access_token'
 
         data = {
@@ -47,9 +47,9 @@ class Copy_App_To_New_Repo(ApiResource):
     def post(self):
         super(Copy_App_To_New_Repo, self).post()
 
-        copyAppToNewRepoAsync.delay(self.token, self.repo_name)
+        task = copyAppToNewRepoAsync.delay(self.token, self.repo_name, request.path)
 
-        return {}
+        return jsonify({'id': task.id})
 
 
     def __init__(self):
@@ -82,6 +82,24 @@ class Add(ApiResource):
         self.x = self.args.get('x')
         self.y = self.args.get('y')
 
+
+@github_api.resource('/timer')
+class Timer(ApiResource):
+
+    def post(self):
+        super(Timer, self).post()
+
+        task = timer.delay(self.n)
+
+        return jsonify({'taskId': task.id})
+
+    def __init__(self):
+        self.scope = Scope.SERVICE
+        super(Timer, self).__init__()
+
+        self.add_argument('n', type=int, required=True, location='args')
+
+        self.n = self.args.get('n')
 
 
 
