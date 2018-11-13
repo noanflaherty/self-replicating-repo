@@ -36,9 +36,11 @@ class ApiResource(Resource):
 
     def post(self):
         # Require that content body is of type 'application/json'
-        self.add_argument('Content-Type', type=str, required=True, location='headers')
-        self.content_type = self.args.get('Content-Type')
-        self._validate_content()
+        # self.add_argument('Content-Type', type=str, required=True, location='headers')
+        # self.content_type = self.args.get('Content-Type')
+        # import ipdb; ipdb.set_trace()
+        # self._validate_content()
+        return
 
 
     def _validate_scope(self):

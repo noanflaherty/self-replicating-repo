@@ -3,6 +3,8 @@ import _ from 'lodash';
 
 import { loadTokenFromLocalStorage } from '../utils/localStorage';
 import { githubAuthTokenSelector, isLoggedInSelector } from '../selectors/index';
+import { createSocketConnection } from '../utils/socket';
+import io from 'socket.io-client';
 
 export const AUTH_TOKEN_LOADED_FROM_LOCAL_STORAGE = 'AUTH_TOKEN_LOADED_FROM_LOCAL_STORAGE';
 export const LOGIN_STARTED = 'LOGIN_STARTED';
@@ -12,6 +14,7 @@ export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGOUT = 'LOGOUT';
 export const FETCHED_USER_DATA = 'FETCHED_USER_DATA';
 export const STARTED_COPY_APP_TO_REPO = 'STARTED_COPY_APP_TO_REPO';
+export const COPY_APP_TO_REPO_STATUS_UPDATE = 'COPY_APP_TO_REPO_STATUS_UPDATE';
 export const COPY_APP_TO_REPO_SUCCESSFUL = 'COPY_APP_TO_REPO_SUCCESSFUL';
 export const RESULTS_FAILURE = 'RESULTS_FAILURE';
 
@@ -43,14 +46,14 @@ export const fetchAuthToken = (data) => {
       method: 'post',
       url: url,
       params: params,
-      config: { headers: { 'Content-Type': 'application/json' } },
+      headers: { 'Content-Type': 'application/json' },
     }).then(resp => {
       dispatch(loginSuccess(resp.data));
-    }).catch(error => {
-      dispatch(loginFailure(error));
     }).then(() => {
       const token = githubAuthTokenSelector(getState());
       dispatch(fetchUserData(token));
+    }).catch(error => {
+      dispatch(loginFailure(error));
     });
   };
 };
@@ -141,18 +144,56 @@ export const copyAppToNewRepo = (values) => {
       url: url,
       data: data,
       headers: headers,
-    }).then(resp => {
-      dispatch(copyAppToRepoSuccessful(resp.data));
     }).catch(error => {
       dispatch(resultsFailure(error));
-    })
+    }).then(resp => {
+      // Once we have begun the job, we want to opena  websocket connection
+      // and subcribe to status updates.
+
+      const taskId = _.get(resp, ['data', 'taskId']);
+      let socket = createSocketConnection();
+
+      // First, we wait for a connection to be establish and join a room, where
+      // the room ID is the same as our task ID.
+      socket.on('connect', () => {
+        socket.emit('JOIN_ROOM', taskId);
+      });
+
+      // Dispatch actions on status updates.
+      socket.on('STATUS_UPDATE', (data) => {
+        dispatch(receivedCopyingAppToRepoStatusUpdate(data));
+      });
+
+      // Finally, once the job has completed, disconnect from the websocket and
+      // dispatch one last action.
+      socket.on('COMPLETED', (data) => {
+        socket.disconnect();
+        dispatch(copyAppToRepoSuccessful(data));
+      });
+
+      // We also need to listen for any job failures.
+      socket.on('FAILED', (error) => {
+        socket.disconnect();
+        dispatch(resultsFailure(error));
+      });
+      socket.on('error', (error) => {
+        socket.disconnect();
+        dispatch(resultsFailure(error));
+      });
+    });
   };
 };
-
 
 export const startedCopyingAppToRepo = () => {
   return {
     type: STARTED_COPY_APP_TO_REPO,
+  };
+};
+
+export const receivedCopyingAppToRepoStatusUpdate = (data) => {
+  return {
+    type: COPY_APP_TO_REPO_STATUS_UPDATE,
+    payload: data,
   };
 };
 

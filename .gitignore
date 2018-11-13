@@ -7,3 +7,4 @@ node_modules/
 server/static/javascript/bundle.js
 server/static/javascript/bundle.js.map
 .env
+*.rdb

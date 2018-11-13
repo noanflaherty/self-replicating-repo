@@ -47,9 +47,9 @@ class Copy_App_To_New_Repo(ApiResource):
     def post(self):
         super(Copy_App_To_New_Repo, self).post()
 
-        task = copyAppToNewRepoAsync.delay(self.token, self.repo_name, request.path)
+        task = copyAppToNewRepoAsync.delay(self.token, self.repo_name)
 
-        return jsonify({'id': task.id})
+        return jsonify({'taskId': task.id})
 
 
     def __init__(self):
@@ -94,7 +94,7 @@ class Timer(ApiResource):
         return jsonify({'taskId': task.id})
 
     def __init__(self):
-        self.scope = Scope.SERVICE
+        self.scope = Scope.MEMBER
         super(Timer, self).__init__()
 
         self.add_argument('n', type=int, required=True, location='args')

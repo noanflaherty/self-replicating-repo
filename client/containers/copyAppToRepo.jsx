@@ -17,7 +17,10 @@ import {
   successfullyAddedFilesSelector,
   unsuccessfullyAddedFilesSelector,
   repoNameInResultsSelector,
+  latestCopyAppToRepoStatusUpdateSelector,
   copyAppToRepoResultsErrorSelector,
+  copyAppToRepoResultsErrorStatusSelector,
+  copyAppToRepoResultsErrorMessageSelector,
   attemptedRepoNameSelector,
   userGitHubLoginSelector,
 } from '../selectors/index';
@@ -90,14 +93,14 @@ class CopyAppToRepo extends Component {
           <div className="row">
             <div className="col-12 text-center">
               <h3>Loading...</h3>
-              <p>(This may take up to 60 seconds)</p>
+              <p>{this.props.latestCopyAppToRepoStatusUpdate}</p>
             </div>
           </div>
         </div>
       );
     } else {
       if (this.props.resultsError != null) {
-        const errorStatusCode = this.props.resultsError.status;
+        const errorStatusCode = this.props.resultsErrorStatus;
 
         if (errorStatusCode == 503) {
           return (
@@ -112,7 +115,7 @@ class CopyAppToRepo extends Component {
             </div>
           );
         } else if (errorStatusCode == 422) {
-          const errorMessage = this.props.resultsError.message;
+          const errorMessage = this.props.resultsErrorMessage;
           const attemptedRepoName = this.props.attemptedRepoName;
           return (
             <div className="container">
@@ -127,13 +130,13 @@ class CopyAppToRepo extends Component {
           );
         } else {
            const errorStatusCode = this.props.resultsError.status;
-           const errorStatusText = this.props.resultsError.statusText;
+           const errorStatusMessage = this.props.resultsErrorMessage;
            return (
              <div className="container">
                <div className="row">
                  <div className="col-12">
                    <h3 className="text-danger">Error Processing Request</h3>
-                   <p className="text-danger">{`Received Error ${errorStatusCode}: ${errorStatusText}. Please try again.`}</p>
+                   <p className="text-danger">{`Received Error ${errorStatusCode}: ${errorStatusMessage}. Please try again.`}</p>
                    <CopyAppToRepoForm/>
                  </div>
                </div>
@@ -171,7 +174,10 @@ function mapStateToProps(state) {
     successfullyAddedFiles: successfullyAddedFilesSelector(state),
     unsuccessfullyAddedFiles: unsuccessfullyAddedFilesSelector(state),
     repoNameInResults: repoNameInResultsSelector(state),
+    latestCopyAppToRepoStatusUpdate: latestCopyAppToRepoStatusUpdateSelector(state),
     resultsError: copyAppToRepoResultsErrorSelector(state),
+    resultsErrorStatus: copyAppToRepoResultsErrorStatusSelector(state),
+    resultsErrorMessage: copyAppToRepoResultsErrorMessageSelector(state),
     attemptedRepoName: attemptedRepoNameSelector(state),
     userLogin: userGitHubLoginSelector(state),
   };

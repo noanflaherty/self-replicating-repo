@@ -10,7 +10,7 @@ var config = {
     path: BUILD_DIR,
     filename: 'bundle.js',
   },
-  devtool: '#cheap-module-source-map.',
+  devtool: 'eval-source-map',
   module: {
     rules: [
       {

@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api, abort, reqparse, request
+from flask_socketio import join_room, leave_room
 from server import app, logger, socketio
 from flask.json import jsonify
 import json
@@ -10,7 +11,7 @@ from github import Github, GithubException
 from server.api.coreApi import ApiResource, Scope
 
 from server.tasks import add, copyAppToNewRepo as copyAppToNewRepoAsync
-from server.utils.socketUtils import sendMessage
+from server.utils.socketUtils import emitEvent
 
 message_api = Api(Blueprint('message_api', __name__))
 
@@ -32,9 +33,12 @@ class Emit_Message(ApiResource):
 
     def post(self):
         super(Emit_Message, self).post()
-        emitted = sendMessage(self.event_type.value, self.message, namespace=self.namespace, room=self.room)
 
-        return emitted
+        logger.debug('Emitting {event_type} to {room}: {data}'.format(event_type=self.event_type.value, room=self.room, data=self.data))
+
+        emitEvent(self.event_type.value, self.data, namespace=self.namespace, room=self.room)
+
+        return
 
 
     def __init__(self):
@@ -53,5 +57,5 @@ class Emit_Message(ApiResource):
         self.add_argument('room', type=str, required=False, location='json')
         self.room = self.args.get('room')
 
-        self.add_argument('message', type=str, required=True, location='json')
-        self.message = self.args.get('message')
+        self.add_argument('data', type=dict, required=True, location='json')
+        self.data = self.args.get('data')

@@ -49,8 +49,8 @@ def create_logger(app, level='DEBUG'):
 
     return logger
 
-def createSocketIO(logger=None):
-    return SocketIO(app, message_queue=app.config.get('SOCKET_MESSAGE_QUEUE'), manage_session=False, logger=logger)
+def create_socketio(app, logger=None):
+    return SocketIO(app, manage_session=False, logger=logger)
 
 
 ## Create the app and set configurations
@@ -62,7 +62,9 @@ logger = create_logger(app)
 
 
 # SocketIO
-socketio = createSocketIO(logger)
+socketio = create_socketio(app, logger=logger)
+from server.sockets import *
+
 
 # Create celery
 celery = create_celery(app);
@@ -81,4 +83,3 @@ app.register_blueprint(index_view)
 
 
 # Register sockets
-from server.sockets import *

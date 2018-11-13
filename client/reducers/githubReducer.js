@@ -6,6 +6,7 @@ import {
   LOGOUT,
   FETCHED_USER_DATA,
   STARTED_COPY_APP_TO_REPO,
+  COPY_APP_TO_REPO_STATUS_UPDATE,
   COPY_APP_TO_REPO_SUCCESSFUL,
   RESULTS_FAILURE,
 } from '../actions/index';
@@ -16,6 +17,7 @@ export const initialState = {
   loginError: false,
   user: {},
   loadingResults: false,
+  latestStatusUpdateMessage: '',
   results: {},
   resultsError: null,
 };
@@ -56,20 +58,29 @@ export const github = (state = initialState, action) => {
       return {
         ...state,
         loadingResults: true,
+        latestStatusUpdateMessage: initialState.latestStatusUpdateMessage,
+      };
+    case COPY_APP_TO_REPO_STATUS_UPDATE:
+      return {
+        ...state,
+        loadingResults: true,
+        latestStatusUpdateMessage: _.get(action.payload, 'message', ''),
       };
     case COPY_APP_TO_REPO_SUCCESSFUL:
       return {
         ...state,
         results: action.payload,
-        loadingResults: false,
-        resultsError: null,
+        loadingResults: initialState.loadingResults,
+        resultsError: initialState.resultsError,
+        latestStatusUpdateMessage: initialState.latestStatusUpdateMessage,
       };
     case RESULTS_FAILURE:
       return {
         ...state,
-        loadingResults: false,
-        results: {},
-        resultsError: action.payload.response,
+        loadingResults: initialState.loadingResults,
+        results: initialState.results,
+        resultsError: action.payload,
+        latestStatusUpdateMessage: initialState.latestStatusUpdateMessage,
       };
     default:
       return state;
