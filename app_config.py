@@ -4,11 +4,14 @@ import redis
 
 load_dotenv()
 
+LOCATION = os.environ.get('LOCATION')
+
 APP_SECRET_KEY = os.environ.get('APP_SECRET_KEY')
 SERVICE_TOKEN = os.environ.get('SERVICE_TOKEN')
-
 SESSION_TYPE = os.environ.get('SESSION_TYPE')
-SESSION_REDIS = redis.Redis(host=os.environ.get('SESSION_REDIS_HOST'), port=os.environ.get('SESSION_REDIS_PORT'))
+REDIS_URL = os.environ.get('REDIS_URL')
+SESSION_REDIS = redis.Redis.from_url(REDIS_URL)
+
 
 SOCKET_MESSAGE_QUEUE = os.environ.get('SOCKET_MESSAGE_QUEUE')
 
