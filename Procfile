@@ -1,2 +1,2 @@
-web: gunicorn --worker-class socketio.sgunicorn.GeventSocketIOWorker wsgi:app
+web: gunicorn --worker-class eventlet -w 1 wsgi:app
 worker: celery -A server.celery worker
