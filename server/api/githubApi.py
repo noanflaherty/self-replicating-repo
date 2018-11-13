@@ -60,29 +60,6 @@ class Copy_App_To_New_Repo(ApiResource):
         self.repo_name = self.args.get('repoName')
 
 
-
-
-@github_api.resource('/add')
-class Add(ApiResource):
-
-    def post(self):
-        super(Add, self).post()
-
-        add.delay(self.x, self.y)
-
-        return {}
-
-    def __init__(self):
-        self.scope = Scope.MEMBER
-        super(Add, self).__init__()
-
-        self.add_argument('x', type=int, required=True, location='args')
-        self.add_argument('y', type=int, required=True, location='args')
-
-        self.x = self.args.get('x')
-        self.y = self.args.get('y')
-
-
 @github_api.resource('/timer')
 class Timer(ApiResource):
 

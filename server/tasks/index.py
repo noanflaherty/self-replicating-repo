@@ -16,12 +16,13 @@ def timer(self, n):
     results = []
 
     for i in range(n):
-        message = 'On number {} of {}'.format(i+1, n)
+        data = {
+            'message': 'On number {} of {}'.format(i+1, n),
+        }
+
         time.sleep(1)
 
-        resp = postEvent('STATUS_UPDATE', message, room=self.request.id)
-
-        logger.debug("Posting Message: {}".format(message))
+        resp = postEvent('STATUS_UPDATE', data, room=self.request.id)
 
         results.append(i+1)
 

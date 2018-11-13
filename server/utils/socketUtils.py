@@ -23,7 +23,8 @@ def postEvent(eventType, data, namespace=None, room=None):
         'namespace': namespace,
         'room': room,
     }
+    with app.test_request_context():
+        url = url_for('message_api.emit_message', _external=True)
 
-    url = 'http://localhost:8000/api/message/emit'#url_for('message_api.emit')
     resp = requests.post(url, json=emit, headers=headers)
     return resp
