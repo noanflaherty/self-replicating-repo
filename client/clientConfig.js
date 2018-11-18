@@ -4,7 +4,7 @@ export const clientConfig = {
   },
   github: {
     clientId: '4851d210ea350c0dc4f1',
-    redirectUri: (process.env.NODE_ENV == 'production' ? 'https://nf-self-replicating-repo.herokuapp.com/login' : 'http://localhost:8000/login'),
+    redirectUri: `${NODE_ENV == 'PROD' ? 'https' : 'http'}://${SERVER_NAME}/login`,
     defaultScope: 'user public_repo',
   },
 };

@@ -29,6 +29,12 @@ var config = {
       },
     ],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'NODE_ENV': JSON.stringify(process.env.LOCATION),
+      'SERVER_NAME': JSON.stringify(process.env.SERVER_NAME),
+    }),
+  ],
 };
 
 module.exports = config;
