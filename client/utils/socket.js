@@ -3,8 +3,7 @@ import io from 'socket.io-client';
 
 export const createSocketConnection = () => {
   const protocol = location.protocol;
-  const hostname = location.hostname;
-  const port = location.port;
+  const host = location.host;
 
-  return io(`${protocol}//${hostname}:${port}`);
+  return io(`${protocol}//${host}`);
 };
