@@ -3,7 +3,7 @@ export const clientConfig = {
     defaultRepoName: 'self-replicating-repo',
   },
   github: {
-    clientId: '4851d210ea350c0dc4f1',
+    clientId: GITHUB_CLIENT_ID,
     redirectUri: `${NODE_ENV == 'PROD' ? 'https' : 'http'}://${SERVER_NAME}/login`,
     defaultScope: 'user public_repo',
   },

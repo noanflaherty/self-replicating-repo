@@ -32,6 +32,7 @@ var config = {
   plugins: [
     new webpack.DefinePlugin({
       'NODE_ENV': JSON.stringify(process.env.LOCATION),
+      'GITHUB_CLIENT_ID': JSON.stringify(process.env.GITHUB_CLIENT_ID),
       'SERVER_NAME': JSON.stringify(process.env.SERVER_NAME),
     }),
   ],
