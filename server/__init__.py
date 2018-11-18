@@ -78,8 +78,5 @@ app.register_blueprint(message_api.blueprint, url_prefix='/api/message')
 
 
 # Register views
-from server.views.index import index_view
+from server.views.index import bp as index_view
 app.register_blueprint(index_view)
-
-
-# Register sockets

@@ -16,7 +16,7 @@ github_api = Api(Blueprint('github_api', __name__))
 class Fetch_Github_Auth_Token(ApiResource):
 
     def post(self):
-        super(Fetch_Github_Auth_Token, self).post()
+        super().post()
         token_url = 'https://github.com/login/oauth/access_token'
 
         data = {
@@ -45,7 +45,7 @@ class Fetch_Github_Auth_Token(ApiResource):
 class Copy_App_To_New_Repo(ApiResource):
 
     def post(self):
-        super(Copy_App_To_New_Repo, self).post()
+        super().post()
 
         task = copyAppToNewRepoAsync.delay(self.token, self.repo_name)
 
@@ -64,7 +64,7 @@ class Copy_App_To_New_Repo(ApiResource):
 class Timer(ApiResource):
 
     def post(self):
-        super(Timer, self).post()
+        super().post()
 
         task = timer.delay(self.n)
 

@@ -4,7 +4,7 @@ import time
 from server import app, celery, logger
 from server.utils.utils import getAllFilesWPathsInDirectory
 from server.utils.githubUtils import createNewRepo
-from server.utils.socketUtils import postEvent
+from server.api.messageApi import postEvent
 
 @celery.task
 def add(x, y):
@@ -99,7 +99,8 @@ def copyAppToNewRepo(self, github_token, repo_name):
         }
 
         resp = postEvent('COMPLETED', results, room=task_id)
-        return
+        return resp
+
     except GithubException as e:
         error = {
             'status': e.status,

@@ -11,6 +11,7 @@ SERVICE_TOKEN = os.environ.get('SERVICE_TOKEN')
 SESSION_TYPE = os.environ.get('SESSION_TYPE')
 REDIS_URL = os.environ.get('REDIS_URL')
 SESSION_REDIS = redis.Redis.from_url(REDIS_URL)
+SERVER_NAME = os.environ.get('SERVER_NAME')
 
 
 SOCKET_MESSAGE_QUEUE = os.environ.get('SOCKET_MESSAGE_QUEUE')

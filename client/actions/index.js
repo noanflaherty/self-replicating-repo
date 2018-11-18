@@ -47,6 +47,7 @@ export const fetchAuthToken = (data) => {
       url: url,
       params: params,
       headers: { 'Content-Type': 'application/json' },
+      data: {},
     }).then(resp => {
       dispatch(loginSuccess(resp.data));
     }).then(() => {
