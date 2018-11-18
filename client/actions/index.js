@@ -4,7 +4,6 @@ import _ from 'lodash';
 import { loadTokenFromLocalStorage } from '../utils/localStorage';
 import { githubAuthTokenSelector, isLoggedInSelector } from '../selectors/index';
 import { createSocketConnection } from '../utils/socket';
-import io from 'socket.io-client';
 
 export const AUTH_TOKEN_LOADED_FROM_LOCAL_STORAGE = 'AUTH_TOKEN_LOADED_FROM_LOCAL_STORAGE';
 export const LOGIN_STARTED = 'LOGIN_STARTED';
