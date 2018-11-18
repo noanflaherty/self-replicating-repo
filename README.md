@@ -64,13 +64,30 @@ To be able to build this app and run it locally, you must have the following ins
    $ npm install
    $ npm run dev
    ```
-8. That's it! Your app is now running locally in dev mode. In your browser, go to <http://0.0.0.0:8000> to test!
+8. We are using celery and rabbitmq to handle asynchronous events. Open another terminal tab and enter the following. This will begin our RabbitMQ broker. You can view the admin UI for this at <http://localhost:15672>.
+   ```
+   $ /usr/local/sbin/rabbitmq-server
+   ```
 
-9. If you'd like to run the app as if it were being run on production instead of in dev mode, then follow all steps above, except execute:
+   $ redis-server
 
-   * `$ gunicorn --bind 0.0.0.0:8000 wsgi` instead of `$ python app.py`; and
+9. Now start the celery worker by opening another terminal tab and entering:
+   ```
+   $ celery -A server.celery worker --loglevel=DEBUG
+   ```
 
-   * ` $ npm run build` instead of `$ npm run dev`.
+10. If you'd like to view the admin UI for celery, open another terminal tab and enter the following, then go to http://localhost:5555>.
+   ```
+      $ flower -A server.celery --port=5555
+   ```
+
+11. Whew! You made it! Your app is now running locally in dev mode. In your browser, go to <http://0.0.0.0:8000> to test!
+
+12. If you'd like to run the app as if it were being run on production instead of in dev mode, then follow all steps above, except execute:
+
+    * `$ gunicorn --bind 0.0.0.0:8000 wsgi` instead of `$ python app.py`; and
+
+    * ` $ npm run build` instead of `$ npm run dev`.
 
 ## Future Enhancements
 As with any project, there are areas worthy of improvement with this app. Here are a few that I would tackle first.

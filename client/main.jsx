@@ -21,7 +21,7 @@ import App from './containers/app.jsx';
 import { loadTokenFromLocalStorage, saveTokenToLocalStorage } from './utils/localStorage';
 
 // Setup redux dev tools
-const composeEnhancer = process.env.NODE_ENV !== 'prod' && typeof window === 'object' &&
+const composeEnhancer = NODE_ENV !== 'PROD' && typeof window === 'object' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
 

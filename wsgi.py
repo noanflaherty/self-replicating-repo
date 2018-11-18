@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-from server import app as application
+from server import app, socketio
 import os
 
 if __name__ == '__main__':
-    application.run()
+    socketio.run(app)

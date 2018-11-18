@@ -9,6 +9,7 @@ export const copyAppToRepoResultsErrorSelector = state => state.github.resultsEr
 export const githubAuthTokenSelector = state => state.github.token;
 export const githubUserDataSelector = state => state.github.user;
 export const isLoadingCopyAppToRepoResultsSelector = state => state.github.loadingResults;
+export const latestCopyAppToRepoStatusUpdateSelector = state => state.github.latestStatusUpdateMessage;
 export const loginErrorSelector = state => state.github.loginError;
 
 export const isLoggedInSelector = createSelector(
@@ -49,6 +50,20 @@ export const repoNameInResultsSelector = createSelector(
 export const attemptedRepoNameSelector = createSelector(
   [copyAppToRepoResultsErrorSelector],
   (copyAppToRepoResultsError) => {
-    return _.get(copyAppToRepoResultsError, ['data', 'data', 'repoName'], '');
+    return _.get(copyAppToRepoResultsError, ['data', 'repoName'], '');
+  }
+);
+
+export const copyAppToRepoResultsErrorStatusSelector = createSelector(
+  [copyAppToRepoResultsErrorSelector],
+  (copyAppToRepoResultsError) => {
+    return _.get(copyAppToRepoResultsError, ['status'], 500);
+  }
+);
+
+export const copyAppToRepoResultsErrorMessageSelector = createSelector(
+  [copyAppToRepoResultsErrorSelector],
+  (copyAppToRepoResultsError) => {
+    return _.get(copyAppToRepoResultsError, ['data', 'message'], 'Unknown error.');
   }
 );

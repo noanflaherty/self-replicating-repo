@@ -79,7 +79,6 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return {
-    token: githubAuthTokenSelector(state),
     loginError: loginErrorSelector(state),
     isLoggedIn: isLoggedInSelector(state),
     user: githubUserDataSelector(state),
