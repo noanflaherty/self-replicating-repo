@@ -2,7 +2,7 @@
 
 This is a self-replicating repo that allows you to connect your GitHub account and create a new repo containing all of this app's files. It can be used to quickly create new repos with boilerplate code.
 
-This web-app demonstrates the use of a Python/Flask backend with a React-Redux frontend. It also showcases the use of REST APIs, asynchronous tasks via Celery, RabbitMQ, and Redis, Websocket connections, and OAuth2, authentication. More on how it works below under "Technical Specifications."
+This web-app demonstrates the use of a Python/Flask backend with a React-Redux frontend. It also showcases the use of REST APIs, asynchronous tasks via Celery, RabbitMQ, and Redis, Websocket connections, and OAuth2 authentication. More on how it works below under "Technical Specifications."
 
 ## Getting Started
 
@@ -11,7 +11,7 @@ This app is already deployed and live on Heroku. To use and test it, simply go t
 ## Technical Specifications
 What does this app do and how does it work?
 
-As mentioned above, this application provides a web-browser interface for creating new GitHub repos with boilerplate code. This app is broken down into two major components:
+As mentioned above, this application provides a web-browser interface for creating new GitHub repos with boilerplate code. This app is broken down into three major components:
 
 ### Backend:
 This app uses a Python Flask App as a backend server to perform tasks such as receiving a GitHub user's OAuth token, queuing asynchronous tasks, and sending progress updates back to the client via websocket connections. The code for the backend lives primarily in `./server/`.
@@ -103,7 +103,7 @@ To be able to build this app and run it locally, you must have the following ins
     * ` $ npm run build` instead of `$ npm run dev`.
 
 ## Future Enhancements
-As with any project, there are areas worthy of improvement with this app. Here are a few that I would tackle first.
+As with any project, there are areas worthy of improvement with this app. Here are a few that I would tackle first:
 
 1.  Implement Immutable.js. Redux benefits from having an immutable state. Implementing immutable reduces frontend bug surface area down the line.
 2.  Better containerization of React components. This app's containers, components, and their styles were implemented in an MVP fashion, but with better organization, they would lend themselves better to component reuse down the line.
